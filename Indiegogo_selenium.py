@@ -7,12 +7,12 @@ def crawl_single_page(link_element, driver):
     d = {"url": link_element.text}
     link_element.click()
     time.sleep(2)
-    d["Creators"] = driver.find_element('//div/contains(@class, "campaignOwnerName-tooltip")').text
-    d["Title"] = driver.find_element('//div/contains(@class, "basicsSection-title")').text
-    d["DollarsPledged"] = driver.find_element('//span/contains(@class, "basicsGoalProgress-amountSold")').text
-    d["DollarsGoal"] = driver.find_element('//span/contains(@class, "basicsGoalProgress-progressDetails-detailsGoal")').text
-    d["NumBackers"] = driver.find_element('//span/contains(@class, "basicsGoalProgress-claimedOrBackers")//span')[0].text
-    d["DaysToGo"] = driver.find_element('//span/contains(@class, "basicsGoalProgress-progressDetails-detailsTimeLeft")//span').text
+    d["Creators"] = driver.find_element('//div[contains(@class, "campaignOwnerName-tooltip")]')[0].text
+    d["Title"] = driver.find_element('//div[contains(@class, "basicsSection-title")]')[0].text
+    d["DollarsPledged"] = driver.find_element('//span[contains(@class, "basicsGoalProgress-amountSold")]')[0].text
+    d["DollarsGoal"] = driver.find_element('//span[contains[@class, "basicsGoalProgress-progressDetails-detailsGoal")]')[0].text
+    d["NumBackers"] = driver.find_element('//span[contains(@class, "basicsGoalProgress-claimedOrBackers")]//span')[0].text
+    d["DaysToGo"] = driver.find_element('//span[contains(@class, "basicsGoalProgress-progressDetails-detailsTimeLeft")]//span')[0].text
     time.sleep(3)
 
 
