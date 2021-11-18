@@ -4,7 +4,7 @@ from selenium.webdriver.common.by import By
 
 
 def crawl_single_page(link_element, driver):
-    d = {"url": link_element.text}
+    d = {"url": link_element.get_attribute("href")}
     link_element.click()
     time.sleep(2)
     d["Creators"] = driver.find_element('//div[contains(@class, "campaignOwnerName-tooltip")]')[0].text
