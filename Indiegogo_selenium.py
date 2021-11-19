@@ -4,12 +4,12 @@ from selenium.webdriver.common.by import By
 import json
 from bs4 import BeautifulSoup
 
-MAX_PAGES_TO_CRAWL = 2
+MAX_PAGES_TO_CRAWL = 20
 
 
-def crawl_single_page(url, driver):
+def crawl_single_page(url, driver, i):
     print("parsing link: {}".format(url))
-    d = {"url": url}
+    d = {"id": str(i), "url": url}
     driver.get(url)
     time.sleep(2)
     try:
@@ -59,7 +59,7 @@ def main():
     d = {"records": []}
     with open("json_all.json", "w", encoding="utf-8") as f:
         for index in range(min(MAX_PAGES_TO_CRAWL, len(links))):
-            d_ret = crawl_single_page(links[index], driver)
+            d_ret = crawl_single_page(links[index], driver, index+1)
             for key in d_ret.keys():
                 d_ret[key] = d_ret[key].encode("ascii", "ignore").decode('utf8')
             print(d_ret)
