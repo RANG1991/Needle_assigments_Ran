@@ -2,8 +2,9 @@ from selenium import webdriver
 import time
 from selenium.webdriver.common.by import By
 import json
+from bs4 import BeautifulSoup
 
-MAX_PAGES_TO_CRAWL = 5
+MAX_PAGES_TO_CRAWL = 2
 
 
 def crawl_single_page(url, driver):
@@ -14,6 +15,9 @@ def crawl_single_page(url, driver):
     try:
         d["Creators"] = driver.find_element(By.XPATH, '//div[contains(@class, "campaignOwnerName-tooltip")]').text
         d["Title"] = driver.find_element(By.XPATH, '//div[contains(@class, "basicsSection-title")]').get_attribute('innerHTML').strip()
+        html_source_code = driver.execute_script("return document.body.innerHTML;")
+        bs = BeautifulSoup(html_source_code, 'html5lib')
+        d["Text"] = bs.prettify()
         d["DollarsPledged"] = str(driver.find_element(By.XPATH,
                                                       '//span[contains(@class, "basicsGoalProgress-amountSold")]').text)
         d["DollarsGoal"] = str(driver.find_element(By.XPATH,
