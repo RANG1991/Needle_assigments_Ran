@@ -3,7 +3,8 @@ import time
 from selenium.webdriver.common.by import By
 import json
 
-MAX_PAGES_TO_CRAWL = 10
+MAX_PAGES_TO_CRAWL = 5
+
 
 def crawl_single_page(url, driver):
     print("parsing link: {}".format(url))
@@ -12,21 +13,23 @@ def crawl_single_page(url, driver):
     time.sleep(2)
     try:
         d["Creators"] = driver.find_element(By.XPATH, '//div[contains(@class, "campaignOwnerName-tooltip")]').text
-        d["Title"] = driver.find_element(By.XPATH, '//div[contains(@class, "basicsSection-title")]').text
+        d["Title"] = driver.find_element(By.XPATH, '//div[contains(@class, "basicsSection-title")]').get_attribute('innerHTML').strip()
         d["DollarsPledged"] = str(driver.find_element(By.XPATH,
                                                       '//span[contains(@class, "basicsGoalProgress-amountSold")]').text)
         d["DollarsGoal"] = str(driver.find_element(By.XPATH,
                                                    '//span[contains(@class, "basicsGoalProgress-progressDetails-detailsGoal")]').text)
-        d["NumBackers"] = driver.find_element(By.XPATH,
-                                              '//span[contains(@class, "basicsGoalProgress-claimedOrBackers")]//span').text
+        backers_elements = driver.find_elements(By.XPATH,
+                                              '//span[contains(@class, "basicsGoalProgress-claimedOrBackers")]//span')
+        d["NumBackers"] = ""
+        for element in backers_elements:
+            if element.text.replace(",", "").isnumeric():
+                d["NumBackers"] = str(element.text)
         d["DaysToGo"] = driver.find_element(By.XPATH,
                                             '//div[contains(@class, "basicsGoalProgress-progressDetails-detailsTimeLeft")]//span').text
-        flexible_goal_element = driver.find_element('//div[contains(@class, "basicsGoalProgress-progressDetails-detailsGoal-goalWording")]'
-                                                    '//span[contains(text(), "Flexible Goal")]')
-        if flexible_goal_element:
+        d["FlexibleGoal"] = "False"
+        flexible_goal_element = driver.find_element(By.XPATH, '//div[contains(@class, "basicsGoalProgress-progressDetails-detailsGoal")]//span[contains(text(), "Flexible Goal")]')
+        if "flexible goal" in flexible_goal_element.text.strip().lower():
             d["FlexibleGoal"] = "True"
-        else:
-            d["FlexibleGoal"] = "False"
     except Exception as e:
         print(e)
     time.sleep(2)
@@ -35,7 +38,7 @@ def crawl_single_page(url, driver):
 
 def main():
     options = webdriver.ChromeOptions()
-    options.add_argument("headless")
+    options.headless = True
     driver_path = "C:/Users/Admin/Desktop/chromedriver.exe"
     driver = webdriver.Chrome(executable_path=driver_path, options=options)
     driver.get('https://www.indiegogo.com/explore/home')
@@ -50,9 +53,11 @@ def main():
     links = [element.get_attribute("href") for element in driver.find_elements(By.XPATH,
                                                         '//div[@class="discoverableCard"]/a[@href]')]
     d = {"records": []}
-    with open("json_all.json", "w") as f:
+    with open("json_all.json", "w", encoding="utf-8") as f:
         for index in range(min(MAX_PAGES_TO_CRAWL, len(links))):
             d_ret = crawl_single_page(links[index], driver)
+            for key in d_ret.keys():
+                d_ret[key] = d_ret[key].encode("ascii", "ignore").decode('utf8')
             print(d_ret)
             d["records"].append(d_ret)
             time.sleep(1)
