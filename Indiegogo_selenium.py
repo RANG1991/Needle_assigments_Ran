@@ -4,7 +4,7 @@ from selenium.webdriver.common.by import By
 import json
 from bs4 import BeautifulSoup
 
-MAX_PAGES_TO_CRAWL = 5
+MAX_PAGES_TO_CRAWL = 300
 
 
 def get_single_xpath(driver, str_xpath, convert_to_string=True):
@@ -26,7 +26,7 @@ def crawl_single_page(url, driver, i):
     driver.get(url)
     time.sleep(2)
     d["Creators"] = get_single_xpath(driver, '//div[contains(@class, "campaignOwnerName-tooltip")]')
-    d["Title"] = get_single_xpath(driver, '//div[contains(@class, "basicsSection-title")]')
+    d["Title"] = driver.title
 
     # get all the text
     html_source_code = driver.execute_script("return document.body.innerHTML;")
