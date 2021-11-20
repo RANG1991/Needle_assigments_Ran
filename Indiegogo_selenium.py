@@ -70,17 +70,17 @@ def main():
         time.sleep(2)
     links = [element.get_attribute("href") for element in driver.find_elements(By.XPATH,
                                                                                '//div[@class="discoverableCard"]/a[@href]')]
-    d = {"records": []}
     with open("json_all.json", "w", encoding="utf-8") as f:
+        f.write("{\n[\n")
         for index in range(min(MAX_PAGES_TO_CRAWL, len(links))):
             d_ret = crawl_single_page(links[index], driver, index + 1)
             for key in d_ret.keys():
                 d_ret[key] = d_ret[key].encode("ascii", "ignore").decode('utf8')
             print(d_ret)
-            d["records"].append(d_ret)
             time.sleep(1)
-        f.write(json.dumps(d, indent=4))
-        f.flush()
+            f.write(json.dumps(d_ret, indent=4) + "\n\n")
+            f.flush()
+        f.write("\n]\n}")
         driver.quit()
 
 
