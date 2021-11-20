@@ -1,4 +1,5 @@
 from selenium import webdriver
+from selenium.webdriver.common import timeouts
 import time
 from selenium.webdriver.common.by import By
 import json
@@ -59,6 +60,8 @@ def main():
     options.headless = True
     driver_path = "C:/Users/Admin/Desktop/chromedriver.exe"
     driver = webdriver.Chrome(executable_path=driver_path, options=options)
+    # driver.timeouts.page_load =
+    # driver.timeouts.script =
     driver.get('https://www.indiegogo.com/explore/home')
     time.sleep(2)
     button = driver.find_element(By.XPATH, '//a[@id="CybotCookiebotDialogBodyButtonAccept"]')
