@@ -30,7 +30,7 @@ def crawl_single_page(url, driver, i):
     d["Title"] = driver.title
 
     # get all the text
-    html_source_code = driver.execute_script("return document.body.innerHTML;")
+    html_source_code = driver.find_element(By.XPATH, '//*[@class="routerContentStory-storyBody"]').get_attribute('innerHTML')
     bs = BeautifulSoup(html_source_code, 'html5lib')
     d["Text"] = bs.prettify()
 
@@ -60,8 +60,6 @@ def main():
     options.headless = True
     driver_path = "C:/Users/Admin/Desktop/chromedriver.exe"
     driver = webdriver.Chrome(executable_path=driver_path, options=options)
-    # driver.timeouts.page_load =
-    # driver.timeouts.script =
     driver.get('https://www.indiegogo.com/explore/home')
     time.sleep(2)
     button = driver.find_element(By.XPATH, '//a[@id="CybotCookiebotDialogBodyButtonAccept"]')
@@ -75,7 +73,9 @@ def main():
                                                                                '//div[@class="discoverableCard"]/a[@href]')]
     with open("json_all.json", "w", encoding="utf-8") as f:
         f.write("{\n[\n")
-        for index in range(min(MAX_PAGES_TO_CRAWL, len(links))):
+        i = 0
+        index = 0
+        while i < min(MAX_PAGES_TO_CRAWL, len(links)):
             d_ret = crawl_single_page(links[index], driver, index + 1)
             for key in d_ret.keys():
                 d_ret[key] = d_ret[key].encode("ascii", "ignore").decode('utf8')
@@ -83,6 +83,8 @@ def main():
             time.sleep(1)
             f.write(json.dumps(d_ret, indent=4) + "\n\n")
             f.flush()
+            i+= 1
+            index += 1
         f.write("\n]\n}")
         driver.quit()
 
