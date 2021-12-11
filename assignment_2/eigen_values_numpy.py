@@ -18,6 +18,7 @@ def main():
     for key in keys:
         l_rows.append(d[key])
     mat = np.array(l_rows)
+    print(mat)
     w, v = np.linalg.eig(mat)
     w = sorted(w, reverse=True)
     print(w)
