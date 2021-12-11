@@ -5,9 +5,11 @@ import scipy.stats
 NUM_POINTS = 500
 
 
-def draw_clump(mu_x, mu_y, std_x, std_y):
-    x = np.random.normal(mu_x, std_x)
-    y = np.random.normal(mu_y, std_y)
+def draw_clump(mu_x, mu_y, std_x, std_y, size):
+    x = np.random.normal(mu_x, std_x, size=(size,))
+    y = np.random.normal(mu_y, std_y, size=(size,))
+    plt.axes().set_ylim(-4, 5)
+    plt.axes().set_xlim(-2, 8)
     plt.plot(x, y, "bo")
 
 
@@ -23,6 +25,8 @@ def draw_half_circle_with_noise(start_x, end_x, start_y, end_y):
     y = np.sin(y)
     y = y + noise
     x = np.linspace(start_x, end_x, num=NUM_POINTS)
+    plt.axes().set_ylim(-1.1, 2.1)
+    plt.axes().set_xlim(-1.1, 2.1)
     plt.plot(x, y, 'bo')
 
 
@@ -33,7 +37,7 @@ def draw_uniform_distribution(x1, x2, y1, y2):
     x = points[:, 0]
     y = points[:, 1]
     plt.plot(x, y, 'bo')
-    plt.savefig("./Two_uniform_dist.png", format="png")
+    plt.savefig("./uniform_dist.png", format="png")
     plt.close()
 
 
@@ -45,22 +49,20 @@ def draw_three_gaussians():
     draw_gaussian(mu, std_first)
     draw_gaussian(mu, std_second)
     draw_gaussian(mu, std_third)
-    plt.savefig("./Two_Three_Gaussians.png", format="png")
+    plt.savefig("./Three_Gaussians.png", format="png")
     plt.close()
 
 
 def draw_four_clumps():
-    draw_clump(0, 0, 4, 0.5)
-    draw_clump(0, 2, 4, 0.5)
-    draw_clump(5, 0, 4, 0.5)
-    draw_clump(5, 2, 4, 0.5)
-    plt.savefig("./Two_Four_Clumps.png", format="png")
+    draw_clump(0, 0, 0.5, 0.1, int(NUM_POINTS / 4))
+    draw_clump(0, 2, 0.5, 0.1, int(NUM_POINTS / 4))
+    draw_clump(5, 0, 0.5, 0.1, int(NUM_POINTS / 4))
+    draw_clump(5, 2, 0.5, 0.1, int(NUM_POINTS / 4))
+    plt.savefig("./Four_Clumps.png", format="png")
     plt.close()
 
 
 def draw_two_half_circles_with_noise():
-    plt.axes().set_ylim(-1.1, 2.1)
-    plt.axes().set_xlim(-1.1, 2.1)
     draw_half_circle_with_noise(-1.0, 1.0, 0, np.pi)
     draw_half_circle_with_noise(0.0, 2.0, np.pi, 2*np.pi)
     plt.savefig("./Two_Half_Circles.png", format="png")
