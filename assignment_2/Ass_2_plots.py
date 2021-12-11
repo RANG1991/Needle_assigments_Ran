@@ -8,8 +8,6 @@ NUM_POINTS = 500
 def draw_clump(mu_x, mu_y, std_x, std_y, size):
     x = np.random.normal(mu_x, std_x, size=(size,))
     y = np.random.normal(mu_y, std_y, size=(size,))
-    plt.axes().set_ylim(-4, 5)
-    plt.axes().set_xlim(-2, 8)
     plt.plot(x, y, "bo")
 
 
@@ -25,8 +23,6 @@ def draw_half_circle_with_noise(start_x, end_x, start_y, end_y):
     y = np.sin(y)
     y = y + noise
     x = np.linspace(start_x, end_x, num=NUM_POINTS)
-    plt.axes().set_ylim(-1.1, 2.1)
-    plt.axes().set_xlim(-1.1, 2.1)
     plt.plot(x, y, 'bo')
 
 
@@ -58,6 +54,10 @@ def draw_four_clumps():
     draw_clump(0, 2, 0.5, 0.1, int(NUM_POINTS / 4))
     draw_clump(5, 0, 0.5, 0.1, int(NUM_POINTS / 4))
     draw_clump(5, 2, 0.5, 0.1, int(NUM_POINTS / 4))
+    x_ticks = np.linspace(-2, 8, 6)
+    y_ticks = np.linspace(-4, 6, 6)
+    plt.xticks(x_ticks)
+    plt.yticks(y_ticks)
     plt.savefig("./Four_Clumps.png", format="png")
     plt.close()
 
@@ -65,6 +65,12 @@ def draw_four_clumps():
 def draw_two_half_circles_with_noise():
     draw_half_circle_with_noise(-1.0, 1.0, 0, np.pi)
     draw_half_circle_with_noise(0.0, 2.0, np.pi, 2*np.pi)
+    x_ticks_labels = np.linspace(-1, 2, 7)
+    y_ticks_labels = np.linspace(-1, 2, 7)
+    locs_x, _ = plt.xticks()
+    locs_y, _ = plt.yticks()
+    plt.xticks(x_ticks_labels)
+    plt.yticks(y_ticks_labels)
     plt.savefig("./Two_Half_Circles.png", format="png")
     plt.close()
 
