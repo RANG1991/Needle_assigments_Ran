@@ -23,9 +23,9 @@ def draw_gaussian(num_points, mu, std):
 
 
 def draw_half_circle_with_noise(num_points, start_x, end_x, start_y, end_y):
-    noise = np.random.uniform(low=0, high=0.1, size=(num_points,))
     y = np.linspace(start_y, end_y, num=num_points)
     y = np.sin(y)
+    noise = np.random.uniform(low=0, high=0.1, size=(num_points,))
     y = y + noise
     x = np.linspace(start_x, end_x, num=num_points)
     plt.plot(x, y, 'bo')
@@ -36,7 +36,7 @@ def draw_half_circle_with_noise(num_points, start_x, end_x, start_y, end_y):
 ################################## main methods ###################################
 
 
-def draw_uniform_distribution(x1, x2, y1, y2, num_points,  index_of_plot_to_save):
+def draw_uniform_distribution(x1, x2, y1, y2, num_points, index_of_plot_to_save):
     minimums = [x1, y1]
     maximums = [x2, y2]
     points = np.random.uniform(low=minimums, high=maximums, size=(num_points, 2))
@@ -77,9 +77,10 @@ def draw_four_clumps(num_points, index_of_plot_to_save):
     np.savetxt("./Four_Clumps_data.txt", all_points, delimiter=",")
 
 
-def draw_two_half_circles_with_noise(num_points, index_of_plot_to_save):
-    points_1 = draw_half_circle_with_noise(int(num_points / 2), -1.0, 1.0, 0, np.pi)
-    points_2 = draw_half_circle_with_noise(int(num_points / 2), 0.0, 2.0, np.pi, 2*np.pi)
+def draw_two_half_circles_with_noise(num_points, start1, end1, start2, end2,
+                                     index_of_plot_to_save):
+    points_1 = draw_half_circle_with_noise(int(num_points / 2), -1.0, 1.0, start1, end1)
+    points_2 = draw_half_circle_with_noise(int(num_points / 2), 0.0, 2.0, start2, end2)
     x_ticks_labels = np.linspace(-1, 2, 7)
     y_ticks_labels = np.linspace(-1, 2, 7)
     locs_x, _ = plt.xticks()
@@ -95,10 +96,11 @@ def draw_two_half_circles_with_noise(num_points, index_of_plot_to_save):
 def main():
     num_points = 500
     for i in range(2):
-        draw_uniform_distribution(-10, 2, 18, 45, num_points=num_points, index_of_plot_to_save=(i+1))
-        draw_three_gaussians(num_points=num_points, index_of_plot_to_save=(i+1))
-        draw_two_half_circles_with_noise(num_points=num_points, index_of_plot_to_save=(i+1))
-        draw_four_clumps(num_points=num_points, index_of_plot_to_save=(i+1))
+        draw_uniform_distribution(-10, 2, 18, 45, num_points=num_points, index_of_plot_to_save=(i + 1))
+        draw_three_gaussians(num_points=num_points, index_of_plot_to_save=(i + 1))
+        draw_two_half_circles_with_noise(num_points, 0, np.pi, np.pi, 2 * np.pi, index_of_plot_to_save=(i + 1))
+        draw_four_clumps(num_points=num_points, index_of_plot_to_save=(i + 1))
+        draw_two_half_circles_with_noise(num_points, 0, np.pi, np.pi, 2 * np.pi, index_of_plot_to_save=(i + 1))
 
 
 if __name__ == '__main__':
