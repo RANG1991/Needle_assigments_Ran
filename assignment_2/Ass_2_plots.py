@@ -1,6 +1,7 @@
 from matplotlib import pyplot as plt
 import numpy as np
 import scipy.stats
+from sklearn import datasets
 
 
 ################################## private methods ###################################
@@ -28,6 +29,12 @@ def draw_half_circle_with_noise(num_points, start_x, end_x, start_y, end_y):
     noise = np.random.uniform(low=0, high=0.1, size=(num_points,))
     y = y + noise
     x = np.linspace(start_x, end_x, num=num_points)
+    plt.plot(x, y, 'bo')
+    points = np.stack([x, y], axis=1)
+    return points
+
+
+def draw_half_circle_with_noise_sparse(x, y):
     plt.plot(x, y, 'bo')
     points = np.stack([x, y], axis=1)
     return points
@@ -93,6 +100,27 @@ def draw_two_half_circles_with_noise(num_points, start1, end1, start2, end2,
     np.savetxt("./Two_Half_Circles_data.txt", all_points, delimiter=",")
 
 
+def draw_two_half_circles_with_noise_sparsely(num_points, index_of_plot_to_save):
+    points, labels = datasets.make_moons(n_samples=num_points, noise=0.0)
+    first_moon = np.where(labels == 0)[0]
+    second_moon = np.where(labels == 1)[0]
+    points_1, points_2 = points[first_moon, 0], points[second_moon, 0]
+    x_1, x_2 = points[first_moon, 1], points[second_moon, 1]
+    draw_half_circle_with_noise_sparse(x_1, points_1)
+    draw_half_circle_with_noise_sparse(x_2, points_2)
+    # x_ticks_labels = np.linspace(-1, 2, 7)
+    # y_ticks_labels = np.linspace(-1, 2, 7)
+    # locs_x, _ = plt.xticks()
+    # locs_y, _ = plt.yticks()
+    # plt.xticks(x_ticks_labels)
+    # plt.yticks(y_ticks_labels)
+    plt.savefig("./Two_Half_Circles_Sparse_{}.png".format(index_of_plot_to_save), format="png")
+    plt.close()
+    points_1, points_2 = points[:, 0], points[:, 1]
+    all_points = np.concatenate([points_1, points_2], axis=0)
+    np.savetxt("./Two_Half_Circles_data.txt", all_points, delimiter=",")
+
+
 def main():
     num_points = 500
     for i in range(2):
@@ -101,6 +129,7 @@ def main():
         draw_two_half_circles_with_noise(num_points, 0, np.pi, np.pi, 2 * np.pi, index_of_plot_to_save=(i + 1))
         draw_four_clumps(num_points=num_points, index_of_plot_to_save=(i + 1))
         draw_two_half_circles_with_noise(num_points, 0, np.pi, np.pi, 2 * np.pi, index_of_plot_to_save=(i + 1))
+        draw_two_half_circles_with_noise_sparsely(num_points, index_of_plot_to_save=(i + 1))
 
 
 if __name__ == '__main__':
