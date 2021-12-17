@@ -24,7 +24,7 @@ def main():
     print(w)
     print(v)
     for i in range(len(w)):
-        print("The {} eigen value of L is: ".format(i + 1), w[i])
+        print("The {} eigen value of L is: {}, with eigen vector of: {}".format(i + 1, w[i], v[i]))
 
 
 if __name__ == "__main__":
