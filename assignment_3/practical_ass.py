@@ -36,7 +36,17 @@ def main():
     word_wo_punc = remove_punc(words_tok)
     plot_words(word_wo_punc)
     pos_tags = pos_tag(words_tok)
-    print(pos_tags)
+    adj_noun_phrases = []
+    current_phrase = []
+    for word, tag in pos_tags:
+        if "JJ" in tag:
+            current_phrase.append(word)
+        if "NN" in tag and len(current_phrase) > 0:
+            current_phrase.append(word)
+            adj_noun_phrases.append(tuple(current_phrase))
+            current_phrase.clear()
+    print(adj_noun_phrases)
+    plot_words(adj_noun_phrases)
 
 
 if __name__ == "__main__":
