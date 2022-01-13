@@ -4,7 +4,7 @@ from nltk.corpus import stopwords
 from nltk.probability import FreqDist
 from nltk import pos_tag
 from matplotlib import pyplot as plt
-
+from nltk.stem import PorterStemmer
 
 def remove_punc(words_list):
     stop_words = set(stopwords.words('english'))
@@ -49,5 +49,28 @@ def main():
     plot_words(adj_noun_phrases)
 
 
+import re
+
 if __name__ == "__main__":
-    main()
+    stemmer = PorterStemmer()
+    print(stemmer.stem("officer"))
+    print(stemmer.stem("office"))
+    print(stemmer.stem("moral"))
+    print(stemmer.stem("morale"))
+
+    print(stemmer.stem("sure"))
+    print(stemmer.stem("unsure"))
+    print(stemmer.stem("special"))
+    print(stemmer.stem("specialist"))
+
+    # with open("./Pride_Jane_Air_Book.txt", "r", encoding="utf8") as f:
+    #     s = f.read()
+    #     two_consecutive_repeated_words_pattern = r"\b(\w+)(\W+)(\1)\b"
+    #     results = re.findall(two_consecutive_repeated_words_pattern, s)
+    #     for tup in results:
+    #         print(tup[1].join([tup[0], tup[2]]))
+    #     if results:
+    #         print(len(results))
+    #         print(results)
+    #     else:
+    #         print("No two consecutive repeated words pattern found")
